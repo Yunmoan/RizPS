@@ -33,16 +33,6 @@ server.listen(port, host, () => {
     console.log(`server address: https://${host}:${port}`);
 });
 
-server.on("data",function(){
-    console.log("data")
-})
-server.on("connect",function(){
-    console.log("connect")
-})
-server.on("error",function(){
-    console.log("error")
-})
-
 app.all('/', (req, res) => {
         console.log("客户端向 / 发送 GET 请求")
         res.send("欢迎来到 RizPS！")
