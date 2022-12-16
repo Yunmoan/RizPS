@@ -21,13 +21,12 @@ app.use(express.static('public', express_options))
 
 //config配置
 const host = "0.0.0.0"//对外ip 当然首选0.0.0.0
-const port = 1244;//对外端口号 直接443 省事
-const loglevel = 1//0表示显示全log，1表示精简显示log
+const port = 1244;//对外端口号
+const loglevel = 1//0表示显示全log，1表示精简显示log 目前这个选项暂时没用
 const options = {
     key: fs.readFileSync('./cert/server.key'),
     cert: fs.readFileSync('./cert/server.crt')
 };//设置证书文件
-const resources_version = "RizRes_Testversion"//res文件夹
 
 const server = https.createServer(options,app);
 server.listen(port, host, () => {
@@ -94,6 +93,20 @@ app.post("/login/sdkCheckLogin.do", (req, res) => {
     });
 })
 
+app.post("/login/guestLogin.do", (req, res) => {
+    let req_datas = ""
+    req.on('data', function (chunk) {
+        req_datas += chunk;
+    });
+    req.on('end', function () {
+        req_datas = req_datas.split("&")
+        console.log(req_datas[0] + "的用户正在使用" + req_datas[3] + "尝试登陆")
+        let resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"sid\\\":\\\"RizPSUser\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"" + req_datas[3].split("=")[1] + "\\\",\\\"priority\\\":3,\\\"cmtBirth\\\":\\\"3\\\",\\\"bind\\\":\\\"9\\\"}\",\"status\":\"1\"}"
+        console.log(resend)
+        res.send(resend)
+    });
+})
+
 const st_41_20190403json = fs.readFileSync("./static_contents/410001_config_20190403.json").toString()
 
 app.all("/67/410001_config_20190403.json", (req, res) => {
@@ -146,4 +159,20 @@ app.all("/api/v1.0/rules", (req, res) => {
 
 app.all("/log/chargeLogReport.do", (req, res) => {
     res.send("success")
+})
+
+app.all("/testasset/iOS/catalog_catalog.json", (req, res) => {
+    res.send(fs.readFileSync("./static_contents/catalog.json").toString())
+})
+
+app.all("/language/language/zh-HK.json", (req, res) => {
+    res.send(fs.readFileSync("./static_contents/zhhk.json").toString())
+})
+
+app.all("/language/language/zh-TW.json", (req, res) => {
+    res.send(fs.readFileSync("./static_contents/zhtw.json").toString())
+})
+
+app.all("/language/language/zh-CN.json", (req, res) => {
+    res.send(fs.readFileSync("./static_contents/zh.json").toString())
 })

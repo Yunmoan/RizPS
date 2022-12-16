@@ -36,7 +36,7 @@ class MlgmXyysd_Animation_Company_Proxy:
         "cfgsdkos.leiting.com",
         "ltgames.aihelp.net",
         "leitsdkosshushu.leiting.com",
-        "lvdgjosdl.ltgamesglobal.net",
+        #"lvdgjosdl.ltgamesglobal.net",
         "sdkoverseasrizlinehmt.ltgamesglobal.net",
         "amp-api-edge.apps.apple.com",
         #"skadsdk.appsflyer.com"
