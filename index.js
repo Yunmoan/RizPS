@@ -93,7 +93,7 @@ app.post("/login/sdkCheckLogin.do", (req, res) => {
     });
 })
 
-app.all("/login/guestLogin.do", (req, res) => {
+app.post("/login/guestLogin.do", (req, res) => {
     let req_datas = ""
     req.on('data', function (chunk) {
         req_datas += chunk;
