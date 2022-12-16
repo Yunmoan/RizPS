@@ -16,7 +16,7 @@
 
 ## 经过测试的设备
 - [x] iPhone X (iOS16 + AppStore台服Rizline1.0.1)
-- [x] Mumu安卓模拟器 (Android12 + Taptap国际版Rizline1.0.2)
+- [x] Mumu安卓模拟器 (Android12 + GooglePlay HK版Rizline1.0.2)
 
 ## 如何使用
 
