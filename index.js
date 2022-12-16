@@ -19,6 +19,7 @@ const express_options = {
 
 app.use(express.static('public', express_options))
 
+//config配置
 const host = "0.0.0.0"//对外ip 当然首选0.0.0.0
 const port = 1244;//对外端口号 直接443 省事
 const loglevel = 1//0表示显示全log，1表示精简显示log
@@ -26,6 +27,7 @@ const options = {
     key: fs.readFileSync('./server.key'),
     cert: fs.readFileSync('./server.crt')
 };//设置证书文件
+const resources_version = "RizRes_Testversion"//res文件夹
 
 const server = https.createServer(options,app);
 server.listen(port, host, () => {

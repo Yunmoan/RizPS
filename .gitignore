@@ -127,3 +127,5 @@ dist
 .pnp.*
 
 __pycache__
+
+resources
