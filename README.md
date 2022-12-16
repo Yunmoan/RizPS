@@ -96,6 +96,9 @@ mitmdump 输出正常，node 没反应，进 Rizline 更新错误100，网络错
 
 > 不行，因为 fiddler.network.https> HTTPS handshake to 192.168.1.247 (for #96) failed. System.Security.Authentication.AuthenticationException 调用 SSPI 失败，请参见内部异常。 < 接收到的消息异常，或格式不正确。Win32 (SChannel) Native Error Code: 0x8009032615
 
+## 社区
+加入Discord：[https://discord.gg/G64wHgqfUK](https://discord.gg/G64wHgqfUK)
+
 ## 特别感谢
 
 特别感谢开源项目 [Grasscutters/Grasscutter](https://github.com/Grasscutters/Grasscutter) 提供的 `proxy.py` 及 `proxy_config.py`
