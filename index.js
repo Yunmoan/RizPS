@@ -76,9 +76,16 @@ app.post("/login/sdkCheckLogin.do", (req, res) => {
     });
     req.on('end', function () {
         req_datas = req_datas.split("&")
-        console.log(req_datas[0] + "的用户正在使用" + req_datas[3] + "尝试登陆（将返回error给用户并让其进行游客登陆）")
-        //let resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"" + req_datas[3].split("=")[1] + "\\\",\\\"priority\\\":3,\\\"cmtBirth\\\":\\\"3\\\",\\\"bind\\\":\\\"9\\\"}\",\"status\":\"1\"}"
-        let resend = "{\"message\":\"username or password error\",\"status\":\"10001\"}"
+        console.log("客户端正在尝试使用SDK登陆，发送的信息为：\n----------")
+        console.log(req_datas + "\n----------")
+        let resend = ""
+        if(req.headers["user-agent"].search("Darwin") != -1){
+            resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"" + req_datas[3].split("=")[1] + "\\\",\\\"priority\\\":3,\\\"cmtBirth\\\":\\\"3\\\",\\\"bind\\\":\\\"9\\\"}\",\"status\":\"1\"}"
+        }
+        else{
+            resend = "{\"message\":\"username or password error\",\"status\":\"10001\"}"
+        }
+        console.log(req.headers["user-agent"])
         console.log(resend)
         res.send(resend)
     });
@@ -90,8 +97,8 @@ app.all("/login/guestLogin.do", (req, res) => {
         req_datas += chunk;
     });
     req.on('end', function () {
-        req_datas = req_datas.split("&")
-        console.log("用户正在尝试游客登陆")
+        console.log("客户端正在尝试游客登陆，发送的信息为：\n----------")
+        console.log(req_datas + "\n----------")
         let resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"userpwd\\\":\\\"FuckYouLTGames\\\",\\\"sid\\\":\\\"RizPSUser\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"157osf59ksl227n25pkocbf4a212reac\\\",\\\"priority\\\":3,\\\"cmtBirth\\\":\\\"3\\\",\\\"bind\\\":\\\"9\\\"}\",\"status\":\"1\"}"
         //let resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"userpwd\\\":\\\"FuckYouLTGames\\\",\\\"sid\\\":\\\"RizPSUser\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"157osf59ksl227n25pkocbf4a212reac\\\",\\\"priority\\\":3,\\\"cmtBirth\\\":\\\"3\\\",\\\"bind\\\":\\\"9\\\"}\",\"status\":\"1\"}"
         console.log(resend)
