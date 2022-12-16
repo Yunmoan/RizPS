@@ -86,14 +86,15 @@ app.post("/login/sdkCheckLogin.do", (req, res) => {
     });
     req.on('end', function () {
         req_datas = req_datas.split("&")
-        console.log(req_datas[0] + "的用户正在使用" + req_datas[3] + "尝试登陆")
-        let resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"" + req_datas[3].split("=")[1] + "\\\",\\\"priority\\\":3,\\\"cmtBirth\\\":\\\"3\\\",\\\"bind\\\":\\\"9\\\"}\",\"status\":\"1\"}"
+        console.log(req_datas[0] + "的用户正在使用" + req_datas[3] + "尝试登陆（将返回error给用户并让其进行游客登陆）")
+        //let resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"" + req_datas[3].split("=")[1] + "\\\",\\\"priority\\\":3,\\\"cmtBirth\\\":\\\"3\\\",\\\"bind\\\":\\\"9\\\"}\",\"status\":\"1\"}"
+        let resend = "{\"message\":\"username or password error\",\"status\":\"10001\"}"
         console.log(resend)
         res.send(resend)
     });
 })
 
-app.post("/login/guestLogin.do", (req, res) => {
+app.all("/login/guestLogin.do", (req, res) => {
     let req_datas = ""
     req.on('data', function (chunk) {
         req_datas += chunk;
@@ -101,7 +102,8 @@ app.post("/login/guestLogin.do", (req, res) => {
     req.on('end', function () {
         req_datas = req_datas.split("&")
         console.log("用户正在尝试游客登陆")
-        let resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"sid\\\":\\\"RizPSUser\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"157osf59ksl227n25pkocbf4a212reac\\\",\\\"priority\\\":3,\\\"cmtBirth\\\":\\\"3\\\",\\\"bind\\\":\\\"9\\\"}\",\"status\":\"1\"}"
+        let resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"userpwd\\\":\\\"FuckYouLTGames\\\",\\\"sid\\\":\\\"RizPSUser\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"157osf59ksl227n25pkocbf4a212reac\\\",\\\"priority\\\":3,\\\"cmtBirth\\\":\\\"3\\\",\\\"bind\\\":\\\"9\\\"}\",\"status\":\"1\"}"
+        //let resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"userpwd\\\":\\\"FuckYouLTGames\\\",\\\"sid\\\":\\\"RizPSUser\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"157osf59ksl227n25pkocbf4a212reac\\\",\\\"priority\\\":3,\\\"cmtBirth\\\":\\\"3\\\",\\\"bind\\\":\\\"9\\\"}\",\"status\":\"1\"}"
         console.log(resend)
         res.send(resend)
     });
@@ -120,7 +122,7 @@ app.all("/language/languageConfig.json", (req, res) => {
 })
 
 app.all("/testasset/iOS/catalog_catalog.hash", (req, res) => {
-    res.send("da3a0df9301dee0c6dce203f434d7220")
+    res.send("3a3ea6ea53779f426accb56e1defd3da")
 })
 
 const stv11_faef = fs.readFileSync("./static_contents/facebook_app_events_feature_bitmask.json").toString()
