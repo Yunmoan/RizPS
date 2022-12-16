@@ -23,8 +23,8 @@ const host = "0.0.0.0"//对外ip 当然首选0.0.0.0
 const port = 1244;//对外端口号 直接443 省事
 const loglevel = 1//0表示显示全log，1表示精简显示log
 const options = {
-    key: fs.readFileSync('./server.key'),
-    cert: fs.readFileSync('./server.crt')
+    key: fs.readFileSync('./cert/server.key'),
+    cert: fs.readFileSync('./cert/server.crt')
 };//设置证书文件
 
 const server = https.createServer(options,app);
@@ -43,8 +43,8 @@ server.on("error",function(){
 })
 
 app.all('/', (req, res) => {
-        console.log("客户端向 / 发送GET请求")
-        res.send("欢迎来到RizPS！")
+        console.log("客户端向 / 发送 GET 请求")
+        res.send("欢迎来到 RizPS！")
     }
 );
 
@@ -55,7 +55,7 @@ app.all('/sync_data', (req, res) => {
         });
         req.on('end', function () {
             req_datas = decodeURIComponent(req_datas)
-            console.log("客户端向 /sync_data 发送POST请求 内容为：\n" + "-----------\n" + req_datas.toString() + "\n----------")
+            console.log("客户端向 /sync_data 发送 POST 请求 内容为：\n" + "-----------\n" + req_datas.toString() + "\n----------")
             res.send("{\"code\":0}")
         })
     }
@@ -65,7 +65,7 @@ const static_inhans = fs.readFileSync("./static_contents/initget_zhans.txt").toS
 const static_inhk = fs.readFileSync("./static_contents/initget_zhk.txt").toString()
 
 app.all('/elva/api/v2.0/initget', (req, res) => {
-    console.log("客户端向 /elva/api/v2.0/initget 发送GET请求")
+    console.log("客户端向 /elva/api/v2.0/initget 发送 GET 请求")
     if(req.url.search("zh-Hans-CN") != -1){
         res.send("{\"flag\":true,\"code\":200,\"message\":\"Success\",\"time\":" + Date.now() + "," + static_inhans)
     }
