@@ -80,7 +80,7 @@ app.post("/login/sdkCheckLogin.do", (req, res) => {
         console.log(req_datas + "\n----------")
         let resend = ""
         if(req.headers["user-agent"].search("Darwin") != -1){
-            resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"" + req_datas[3].split("=")[1] + "\\\",\\\"priority\\\":3,\\\"cmtBirth\\\":\\\"3\\\",\\\"bind\\\":\\\"9\\\"}\",\"status\":\"1\"}"
+            resend = "{\"message\":\"username or password error\",\"status\":\"10001\"}"
         }
         else{
             resend = "{\"message\":\"username or password error\",\"status\":\"10001\"}"
