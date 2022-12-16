@@ -58,7 +58,7 @@ openssl x509 -inform PEM -subject_hash_old -in mitmproxy-ca-cert.cer
 
 若 /system 分区可写，在获取 Root 权限后将重命名好的证书放入 `/system/etc/security/cacerts` 目录下重启手机即可
 
-若 /system 分区只读，则需要通过 Magisk 模块的方式安装证书，具体方法请自行搜索
+若 /system 分区只读，则需要通过 Magisk 模块的方式安装证书，在 http://mitm.it/cert/magisk 即可获取用于安装的 Magisk 模块
 
 在安装好证书之后，打开手机的系统设置，此时应该能在 安全 - 更多安全设置 - 加密与凭据 - 信任的凭据(不同手机厂商可能位置不同) 中的系统一栏找到 mitmproxy 的证书
 
