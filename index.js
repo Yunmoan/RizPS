@@ -83,7 +83,7 @@ app.post("/login/sdkCheckLogin.do", (req, res) => {
             resend = "{\"message\":\"username or password error\",\"status\":\"10001\"}"
         }
         else{
-            resend = "{\"message\":\"username or password error\",\"status\":\"10001\"}"
+            resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"" + req_datas[16].split("=")[1] + "\\\",\\\"priority\\\":0,\\\"cmtBirth\\\":\\\"0\\\",\\\"bind\\\":\\\"\\\"}\",\"status\":\"1\"}"
         }
         console.log(req.headers["user-agent"])
         console.log(resend)
@@ -97,9 +97,16 @@ app.all("/login/guestLogin.do", (req, res) => {
         req_datas += chunk;
     });
     req.on('end', function () {
+        let beforce_req_datas = req_datas
         console.log("客户端正在尝试游客登陆，发送的信息为：\n----------")
         console.log(req_datas + "\n----------")
-        let resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"userpwd\\\":\\\"FuckYouLTGames\\\",\\\"sid\\\":\\\"RizPSUser\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"157osf59ksl227n25pkocbf4a212reac\\\",\\\"priority\\\":3,\\\"cmtBirth\\\":\\\"3\\\",\\\"bind\\\":\\\"9\\\"}\",\"status\":\"1\"}"
+        let resend = ""
+        if(req_datas.search("isRegister=0") != -1){
+            resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"userpwd\\\":\\\"5f5e6088d13a732ea4ad5150586e4b39\\\",\\\"sid\\\":\\\"RizPSUseras\\\",\\\"username\\\":\\\"RizPSUsera\\\",\\\"token\\\":\\\"157osf59ksl227n25pkocbf4a212reac\\\",\\\"priority\\\":3,\\\"cmtBirth\\\":\\\"3\\\",\\\"bind\\\":\\\"9\\\"}\",\"status\":\"1\"}"
+        }
+        else{
+            resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"userpwd\\\":\\\"FuckYouLTGames\\\",\\\"sid\\\":\\\"RizPSUser\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"157osf59ksl227n25pkocbf4a212reac\\\",\\\"priority\\\":3,\\\"cmtBirth\\\":\\\"3\\\",\\\"bind\\\":\\\"9\\\"}\",\"status\":\"1\"}"
+        }
         //let resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"userpwd\\\":\\\"FuckYouLTGames\\\",\\\"sid\\\":\\\"RizPSUser\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"157osf59ksl227n25pkocbf4a212reac\\\",\\\"priority\\\":3,\\\"cmtBirth\\\":\\\"3\\\",\\\"bind\\\":\\\"9\\\"}\",\"status\":\"1\"}"
         console.log(resend)
         res.send(resend)
