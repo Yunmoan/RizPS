@@ -102,7 +102,7 @@ app.all("/login/guestLogin.do", (req, res) => {
         console.log(req_datas + "\n----------")
         let resend = ""
         if(req_datas.search("isRegister=0") != -1){
-            resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"userpwd\\\":\\\"5f5e6088d13a732ea4ad5150586e4b39\\\",\\\"sid\\\":\\\"RizPSUseras\\\",\\\"username\\\":\\\"RizPSUsera\\\",\\\"token\\\":\\\"157osf59ksl227n25pkocbf4a212reac\\\",\\\"priority\\\":3,\\\"cmtBirth\\\":\\\"3\\\",\\\"bind\\\":\\\"9\\\"}\",\"status\":\"1\"}"
+            resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"userpwd\\\":\\\"3514df02e1a4ee63056efb5ca6989231\\\",\\\"sid\\\":\\\"RizPSUseras\\\",\\\"username\\\":\\\"RizPSUsera\\\",\\\"token\\\":\\\"d384f207b6d76360a364824099e1937c\\\",\\\"cmtBirth\\\":0,\\\"bind\\\":\\\"\\\"}\",\"status\":\"1\"}"
         }
         else{
             resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"userpwd\\\":\\\"FuckYouLTGames\\\",\\\"sid\\\":\\\"RizPSUser\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"157osf59ksl227n25pkocbf4a212reac\\\",\\\"priority\\\":3,\\\"cmtBirth\\\":\\\"3\\\",\\\"bind\\\":\\\"9\\\"}\",\"status\":\"1\"}"

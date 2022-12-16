@@ -12,10 +12,11 @@
 
 ## 已知问题
 1. 游戏内资源下载较慢，主要体现在第一次启动游戏、下载歌曲和进入歌曲时（主要流量要经过电脑再到手机，还要在mitmproxy那里卡会儿，但也不会慢多少）
+2. 安卓设备无法使用，问题已定位，正在尽力尝试修复
 
 ## 经过测试的设备
 - [x] iPhone X (iOS16 + AppStore台服Rizline1.0.2)
-- [x] Mumu安卓模拟器 (Android12 + GooglePlay HK版Rizline1.0.2)
+- [ ] Mumu安卓模拟器 (Android12 + GooglePlay HK版Rizline1.0.2)
 
 ## 如何使用
 
