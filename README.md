@@ -2,6 +2,8 @@
 
 这是对于 Rizline（律动轨迹）游戏港澳台版本的服务端重实现，不装了摊牌了，从名字就能看出来，PS = Private Server，这其实就是个律动轨迹的私服
 
+<font color="00dd00">README中绿色字体部分代表重要，请务必仔细阅读</font>
+
 ### 注意：本项目目前还很不稳定且未经充分测试，因此问题较多且会经常更新，获取最新状态及询问问题请移步discord服务器
 
 ## 首先，LT Games，Fuck You
@@ -35,7 +37,7 @@
 
 ### 克隆仓库并补全依赖及设置proxy
 
-Riz PS 的运行依赖于 npm、node、python3 以及 python3 的库 mitmproxy（可以直接通过 pip 安装），请先安装好这些东西并配置好环境变量
+Riz PS 的运行依赖于 npm、node、python3 以及 python3 的库 mitmproxy（可以直接通过 pip 安装），请先安装好这些东西并<font color="00dd00">配置好环境变量</font>
 
 使用以下命令克隆仓库：
 
@@ -49,9 +51,9 @@ cd 到克隆出文件夹里，然后用以下命令补全 node_modules：
 npm install
 ```
 
-随后打开`proxy_config.py`，将里面的REMOTE_HOST改为对于手机来说你电脑的ip
+<font color="00dd00">随后打开`proxy_config.py`，将里面的REMOTE_HOST改为对于手机来说你电脑的ip</font>
 
-然后打开index.js，如果您先前未登陆过游戏，请将第25行`const first_play = false`中的`false`改为`true`，并在第一次成功进入游戏后改回去。对于Android来说，每次卸载重装都算是第一次登陆，而对于iOS来说，保持为false即可
+<font color="00dd00">然后打开index.js，如果您先前未登陆过游戏，请将第25行`const first_play = false`中的`false`改为`true`，并在第一次成功进入游戏后改回去。对于Android来说，每次卸载重装都算是第一次登陆，而对于iOS来说，保持为false即可</font>
 
 ### 在你的设备上信任 mitmproxy 证书
 
@@ -61,7 +63,7 @@ npm install
 mitmdump -s proxy.py -k --set block_global=false
 ```
 
-确保你手机跟电脑在同一局域网下，在手机上将 WiFi 代理设置为 [电脑IP:8080]（下载好证书之后请恢复原来的设置，否则会导致无法联网），使用浏览器打开 mitm.it
+确保你手机跟电脑在<font color="00dd00">同一局域网下</font>，在手机上将 WiFi 代理设置为 <font color="00dd00">[电脑IP:8080]</font>（下载好证书之后请恢复原来的设置，否则会导致无法联网），使用浏览器打开 mitm.it
 
 不出意外的话应该能看到几个系统的图标，若显示 "If you can see this, traffic is not passing through mitmproxy."，请检查你的代理设置是否正确
 
@@ -69,7 +71,7 @@ mitmdump -s proxy.py -k --set block_global=false
 
 Android 端的配置需要进行证书格式转换，故请事先在电脑上安装 OpenSSL
 
-在刚才的网页中点击 Android 右边的"Get mitmproxy-ca-cert.cer"并将下载好的 .cer 格式证书传到电脑上
+<font color="00dd00">在刚才的网页中点击 Android 右边的"Get mitmproxy-ca-cert.cer"并将下载好的 .cer 格式证书传到电脑上</font>
 
 运行这条命令
 
@@ -81,7 +83,7 @@ openssl x509 -inform PEM -subject_hash_old -in mitmproxy-ca-cert.cer
 
 由于 Google 的限制，高版本 Android 无法直接安装可供系统信任的根证书
 
-- 方法一（需Root）：
+- 方法一（<font color="00dd00">需Root</font>）：
 
     若 /system 分区可写，在获取 Root 权限后将重命名好的证书放入 `/system/etc/security/cacerts` 目录下重启手机即可
 
@@ -89,7 +91,7 @@ openssl x509 -inform PEM -subject_hash_old -in mitmproxy-ca-cert.cer
 
     在安装好证书之后，打开手机的系统设置，此时应该能在 安全 - 更多安全设置 - 加密与凭据 - 信任的凭据(不同手机厂商可能位置不同) 中的系统一栏找到 mitmproxy 的证书
 
-- 方法二：
+- 方法二（需改包）：
 
     使用工具：
     - MT管理器
@@ -155,20 +157,20 @@ openssl x509 -inform PEM -subject_hash_old -in mitmproxy-ca-cert.cer
 
 在刚才的网页中点击 iOS 右边的"Get mitmproxy-ca-cert.pem"下载并进行安装
 
-在设置 > 通用 > 关于本机 > 证书信任设置 中找到刚才安装的证书，将其信任即可
+在<font color="00dd00">设置 > 通用 > 关于本机 > 证书信任设置</font> 中找到刚才安装的证书，将其信任即可
 
-### 绕过玩家区域验证
+## 绕过玩家区域验证
 
-由于Rizline在1.0.2更新中加入了区域验证，我们必须绕过区域验证才能实现裸连登陆
+由于Rizline在1.0.2更新中加入了区域验证，我们必须绕过区域验证才能实现裸连登陆，否则只能以路由器层面挂一个梯子游玩啦...
 
 这么久了才出绕过的方法，也主要是因为我们不知道Rizline验证玩家区域的具体方式，向哪个服务器发送请求，而且抓包也抓不到，直到今天拿Il2CppDumper和IDA稍稍逆向了一下才实锤了百度和谷歌这两个域名
 
 那么OK话不多说，Start！
 
 #### Android
-为了实现从系统层面拦截到百度和谷歌的连接，是的你没听错，HTTP代理对这不起作用。我们必须将手机root以修改hosts文件，当然，期待各位大佬们研究出无需root的方法
+为了实现从系统层面拦截到百度和谷歌的连接，是的你没听错，HTTP代理对这不起作用。我们<font color="00dd00">必须将手机root</font>以修改hosts文件，当然，期待各位大佬们研究出无需root的方法
 
-使用MT管理器前往根目录，打开/system/etc/hosts，以文本编辑
+使用MT管理器前往根目录，打开<font color="00dd00">/system/etc/hosts</font>，以文本编辑
 
 并在文本的最下方追加以下信息：
 
@@ -179,7 +181,7 @@ openssl x509 -inform PEM -subject_hash_old -in mitmproxy-ca-cert.cer
 电脑ip www.baidu.com
 ```
 
-填写完毕后保存，打开你手机的浏览器，试着访问`www.baidu.com`和`www.google.com`，看看是不是都能正常打开，可能两个链接打开后内容都变成了“欢迎来到RizPS！"，也可能谷歌打开后内容为“欢迎来到RizPS！"，百度打开后内容跟平时没区别，这都是正常的，说白了就是只要确保访问这两个网站时的HTTP Status都是200 OK就行
+填写完毕后保存，打开你手机的浏览器，试着访问`www.baidu.com`和`www.google.com`，看看是不是都能正常打开，可能两个链接打开后内容都变成了“欢迎来到RizPS！"，也可能谷歌打开后内容为“欢迎来到RizPS！"，百度打开后内容跟平时没区别，这都是正常的，说白了就是只要确保访问这两个网站时的HTTP Status都是<font color="00dd00">200 OK</font>就行
 
 #### iOS
 iOS目前还正在想有什么好的办法，ummmmm....可能得用上Shadowrocket？
@@ -196,11 +198,11 @@ node --tls-min-v1.2 index.js
 
 在确保 mitmdump 和 node 都正常运行的情况下，在手机上将 WiFi 代理设置为 [电脑IP:8080]，启动Rizline，Enjoy it😊！
 
-游戏安装后第一次启动会下载资源文件，可能需要比较长的时间，超过10分钟再当作问题来反馈哦~
+<font color="00dd00">游戏安装后第一次启动会下载资源文件，可能需要比较长的时间</font>，超过10分钟可以尝试重启游戏，实在不行再当作一个问题去询问他人
 
-在打开游戏后，请一直使用游客登陆，忽视所有让你绑定账号或重试账号登陆的提示，若弹出请选择与继续游客登陆相关的选项
+在打开游戏后，请<font color="00dd00">一直使用游客登陆，忽视所有</font>让你绑定账号或重试账号登陆的提示，若弹出请选择与继续游客登陆相关的选项
 
-玩够了记得把手机上的代理设置恢复原状，否则会导致无法正常联网
+玩够了记得把手机上的代理设置<font color="00dd00">恢复原状</font>，否则会导致无法正常联网
 
 ## 游戏报错解决
 
@@ -254,7 +256,7 @@ mitmdump 输出正常，node 没反应，进 Rizline 更新错误100，网络错
 3. 对应请求收到后发送Fake Return骗过client即可
 ### 在有ip限制且无法双重代理的情况下使用fiddler classic抓取游戏与官方服务器的通信包
 1. 使用Clash for Windows挂梯子，使用Mixin+TAP（虚拟网卡）模式，将整个电脑的网络请求都交给clash管理，节点需港澳台
-2. 因为使用虚拟网卡挂梯子，所以不会占用代理，fiddler转发流量时向官服请求也是走的clash，此时直接打开Fiddler Classic然后拿手机或模拟器信任证书然后连代理就行
+2. 因为使用虚拟网卡挂梯子，所以不会占用代理，fiddler转发流量时向官服请求也是走的clash，此时直接打开Fiddler Classic然后拿模拟器信任证书然后连代理就行，若要拿手机连（实机抓包），则需要在路由器层面挂梯子才行
 3. 在特殊情况下可以善用SocksCap64
 
 ## 特别感谢
