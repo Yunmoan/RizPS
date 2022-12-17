@@ -22,6 +22,7 @@ app.use(express.static('public', express_options))
 //config配置
 const host = "0.0.0.0"//对外ip 当然首选0.0.0.0
 const port = 1244;//对外端口号
+const first_play = false
 const loglevel = 1//0表示显示全log，1表示精简显示log
 const options = {
     key: fs.readFileSync('./cert/server.key'),
@@ -113,7 +114,12 @@ app.all("/login/guestLogin.do", (req, res) => {
         console.log("客户端正在尝试游客登陆（可能是初次尝试注册账号？），发送的信息为：")
         console.log(req_datas)
         let resend = ""
-        resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"userpwd\\\":\\\"e5d566420a1a489f3198df1fbc50b916\\\",\\\"sid\\\":\\\"myglp5t0\\\",\\\"username\\\":\\\"yj5ekog5\\\",\\\"token\\\":\\\"f97f703b4c8d2138c6e1e678b1bc1698\\\",\\\"cmtBirth\\\":0,\\\"bind\\\":\\\"\\\"}\",\"status\":\"1\"}"
+        if(first_play != true){
+            resend = "{\"message\":\"{\\\"timestamp\\\":\\\"1671263645898\\\",\\\"sid\\\":\\\"xkykm9p6\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"6ac0e471929872e866edbf8ef4aeb8f7\\\",\\\"cmtBirth\\\":\\\"0\\\",\\\"bind\\\":\\\"3\\\"}\",\"status\":\"1\"}"
+        }
+        else{
+            resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"userpwd\\\":\\\"e5d566420a1a489f3198df1fbc50b916\\\",\\\"sid\\\":\\\"myglp5t0\\\",\\\"username\\\":\\\"yj5ekog5\\\",\\\"token\\\":\\\"f97f703b4c8d2138c6e1e678b1bc1698\\\",\\\"cmtBirth\\\":0,\\\"bind\\\":\\\"\\\"}\",\"status\":\"1\"}"
+        }
         //let resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"userpwd\\\":\\\"FuckYouLTGames\\\",\\\"sid\\\":\\\"RizPSUser\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"157osf59ksl227n25pkocbf4a212reac\\\",\\\"priority\\\":3,\\\"cmtBirth\\\":\\\"3\\\",\\\"bind\\\":\\\"9\\\"}\",\"status\":\"1\"}"
         console.log(resend)
         res.send(resend)
