@@ -21,9 +21,9 @@ app.use(express.static('public', express_options))
 
 //config配置
 const host = "0.0.0.0"//对外ip 当然首选0.0.0.0
-const port = 1244;//对外端口号
-const first_play = false
-const loglevel = 1//0表示显示全log，1表示精简显示log
+const port = 443;//对外端口号
+const first_play = true
+const loglevel = 0//0表示显示全log，1表示精简显示log
 const options = {
     key: fs.readFileSync('./cert/server.key'),
     cert: fs.readFileSync('./cert/server.crt')
@@ -44,11 +44,27 @@ server.listen(port, host, () => {
     console.log(`服务器启动成功，你可以通过以下地址访问: https://${host}:${port}`);
 });
 
+function randomString(e) {    
+    e = e || 32;
+    var t = "abcdefhijkmnprstwxyz12345678",
+    a = t.length,
+    n = "";
+    for (i = 0; i < e; i++) n += t.charAt(Math.floor(Math.random() * a));
+    return n
+}
+
 app.all('/', (req, res) => {
         console.log("客户端向 / 发送 GET 请求")
         res.send("欢迎来到 RizPS！")
     }
 );
+
+app.connect("*", (req, res) => {
+    res.statusCode(200)
+    res.send("{\"code\":\"0\"}")
+})
+
+
 
 app.all('/sync_data', (req, res) => {
         let req_datas = ""
@@ -144,6 +160,25 @@ app.all("/testasset/iOS/catalog_catalog.hash", (req, res) => {
 
 const stv11_faef = fs.readFileSync("./static_contents/facebook_app_events_feature_bitmask.json").toString()
 const stv11_faec = fs.readFileSync("./static_contents/facebook_app_events_config.json").toString()
+const st_fb_msdkgk = fs.readFileSync("./static_contents/facebook_mobile_sdk_gk.json").toString()
+
+app.all("/v11.0", (req, res) => {
+    let req_datas = ""
+    req.on('data', function (chunk) {
+        req_datas += chunk;
+    });
+    req.on('end', function () {
+        if(req_datas.search("app_events_feature_bitmask") != -1){
+            res.send(stv11_faef)
+        }
+        else if(req_datas.search("app_events_config") != -1){
+            res.send(stv11_faec)
+        }
+        else if(req_datas.search("mobile_sdk_gk") != -1){
+            res.send(st_fb_msdkgk)
+        }
+    })
+})
 
 app.all("/v11.0/493960762698668", (req, res) => {
     if(req.url.search("app_events_feature_bitmask") != -1){
@@ -153,8 +188,6 @@ app.all("/v11.0/493960762698668", (req, res) => {
         res.send(stv11_faec)
     }
 })
-
-const st_fb_msdkgk = fs.readFileSync("./static_contents/facebook_mobile_sdk_gk.json").toString()
 
 app.all("/v11.0/493960762698668/mobile_sdk_gk", (req, res) => {
     res.send(st_fb_msdkgk)
@@ -180,6 +213,11 @@ app.all("/log/chargeLogReport.do", (req, res) => {
     res.send("success")
 })
 
+app.all("/elva/api/initset", (req, res) => {
+    console.log("客户端向 /elva/api/v2.0/initset 发送请求")
+    res.send("{\"flag\":true,\"code\":0,\"desc\":\"\",\"data\":true}")
+})
+
 app.all("/testasset/iOS/catalog_catalog.json", (req, res) => {
     res.send(fs.readFileSync("./static_contents/catalog.json").toString())
 })
@@ -194,4 +232,9 @@ app.all("/language/language/zh-TW.json", (req, res) => {
 
 app.all("/language/language/zh-CN.json", (req, res) => {
     res.send(fs.readFileSync("./static_contents/zh.json").toString())
+})
+
+app.all("/generate_204", (req, res) => {
+    res.statusCode = 204
+    res.send()
 })

@@ -3,7 +3,8 @@ import os
 # This can also be replaced with another IP address.
 USE_SSL = True
 REMOTE_HOST = "192.168.1.247"
-REMOTE_PORT = 1244
+REMOTE_PORT = 443
+PROXY_MODE = "RESEND"
 
 if os.getenv('MITM_REMOTE_HOST') != None:
     REMOTE_HOST = os.getenv('MITM_REMOTE_HOST')

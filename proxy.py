@@ -29,30 +29,68 @@ from mitmproxy.utils import human
 from proxy_config import USE_SSL
 from proxy_config import REMOTE_HOST
 from proxy_config import REMOTE_PORT
+from proxy_config import PROXY_MODE
 
 class MlgmXyysd_Animation_Company_Proxy:
 
-    LIST_DOMAINS = [
+    LIST_ALLOW_DOMAINS = [
+        "lvdgjosdl.ltgamesglobal.net",
+    ]
+
+    LIST_RESEND_DOMAINS = [
         "cfgsdkos.leiting.com",
-        "ltgames.aihelp.net",
+        #"ltgames.aihelp.net",
         "leitsdkosshushu.leiting.com",
         #"lvdgjosdl.ltgamesglobal.net",
         "sdkoverseasrizlinehmt.ltgamesglobal.net",
         "amp-api-edge.apps.apple.com",
         "sdkoverseas.leiting.com",
-        "graph.facebook.com"
+        "graph.facebook.com",
+        "location.services.mozilla.com"
         #"skadsdk.appsflyer.com"
     ]
 
     def request(self, flow: http.HTTPFlow) -> None:
-        if flow.request.host in self.LIST_DOMAINS:
+        print("原请求URL：" + flow.request.url)
+        if PROXY_MODE == "ALLOW":
+            if flow.request.host in self.LIST_ALLOW_DOMAINS:
+                pass
+            else:
+                if USE_SSL:
+                    flow.request.scheme = "https"
+                else:
+                    flow.request.scheme = "http"
+                flow.request.host = REMOTE_HOST
+                flow.request.port = REMOTE_PORT
+        elif PROXY_MODE == "RESEND":
+            if flow.request.host in self.LIST_RESEND_DOMAINS:
+                if USE_SSL:
+                    flow.request.scheme = "https"
+                else:
+                    flow.request.scheme = "http"
+                flow.request.host = REMOTE_HOST
+                flow.request.port = REMOTE_PORT
+
+    def http_connect(self, flow: http.HTTPFlow) -> None:
+        if "graph.facebook.com" in flow.request.host:
             if USE_SSL:
-                flow.request.scheme = "https"
+                    flow.request.scheme = "https"
             else:
                 flow.request.scheme = "http"
             flow.request.host = REMOTE_HOST
             flow.request.port = REMOTE_PORT
-
+            print("CONNECT " + str(flow.request.host) + ":" + str(flow.request.port))
+        elif "leitsdkosshushu.leiting.com" in flow.request.host:
+            if USE_SSL:
+                    flow.request.scheme = "https"
+            else:
+                flow.request.scheme = "http"
+            flow.request.host = REMOTE_HOST
+            flow.request.port = REMOTE_PORT
+            print("CONNECT " + str(flow.request.host) + ":" + str(flow.request.port))
+        else:
+            pass
+    
 class InterceptionResult(Enum):
     SUCCESS = 1
     FAILURE = 2
