@@ -201,10 +201,15 @@ mitmdump 输出正常，node 没反应，进 Rizline 更新错误100，网络错
 ## 社区
 加入Discord：[https://discord.gg/G64wHgqfUK](https://discord.gg/G64wHgqfUK)
 
-## 思路梳理
+## 服务器实现思路及抓包教程
+### 服务器实现
 1. 游戏第一次打开会从官方cdn下载assetbundles，可以理解为热更新，走服务器lvdgjosdl.ltgamesglobal.net（无需转发）
 2. 如果游戏是第一次打开，请求guestLogin.do进行账号注册，后续直接请求sdkCheckLogin.do当作正式账号登陆
 3. 对应请求收到后发送Fake Return骗过client即可
+### 在有ip限制且无法双重代理的情况下使用fiddler classic抓取游戏与官方服务器的通信包
+1. 使用Clash for Windows挂梯子，使用Mixin+TAP（虚拟网卡）模式，将整个电脑的网络请求都交给clash管理，节点需港澳台
+2. 因为使用虚拟网卡挂梯子，所以不会占用代理，fiddler转发流量时向官服请求也是走的clash，此时直接打开Fiddler Classic然后拿手机或模拟器信任证书然后连代理就行
+3. 在特殊情况下可以善用SocksCap64
 
 ## 特别感谢
 
