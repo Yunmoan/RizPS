@@ -40,7 +40,7 @@ npm install
 
 随后打开`proxy_config.py`，将里面的REMOTE_HOST改为对于手机来说你电脑的ip
 
-然后打开index.js，如果您先前已登陆过游戏，请将第25行`const first_play = false`中的`false`改为`true`，并在第一次成功进入游戏后改回去。对于Android来说，每次卸载重装都算是第一次登陆，而对于iOS来说，保持为true即可
+然后打开index.js，如果您先前未登陆过游戏，请将第25行`const first_play = false`中的`false`改为`true`，并在第一次成功进入游戏后改回去。对于Android来说，每次卸载重装都算是第一次登陆，而对于iOS来说，保持为false即可
 
 ### 在你的设备上信任 mitmproxy 证书
 
