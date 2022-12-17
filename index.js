@@ -91,7 +91,12 @@ app.post("/login/sdkCheckLogin.do", (req, res) => {
         console.log("客户端正在尝试使用SDK登陆，发送的信息为：")
         console.log(req_datas)
         let resend = ""
-        resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"" + req_datas[16].split("=")[1] + "\\\",\\\"priority\\\":0,\\\"cmtBirth\\\":\\\"0\\\",\\\"bind\\\":\\\"\\\"}\",\"status\":\"1\"}"
+        if(req.headers["user-agent"].search("Darwin") != -1){
+            resend = "{\"message\":\"username or password error\",\"status\":\"10001\"}"
+        }
+        else{
+            resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"" + req_datas[16].split("=")[1] + "\\\",\\\"priority\\\":0,\\\"cmtBirth\\\":\\\"0\\\",\\\"bind\\\":\\\"\\\"}\",\"status\":\"1\"}"
+        }
         console.log(req.headers["user-agent"])
         console.log(resend)
         res.send(resend)

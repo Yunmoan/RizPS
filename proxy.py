@@ -39,7 +39,8 @@ class MlgmXyysd_Animation_Company_Proxy:
         #"lvdgjosdl.ltgamesglobal.net",
         "sdkoverseasrizlinehmt.ltgamesglobal.net",
         "amp-api-edge.apps.apple.com",
-        "sdkoverseas.leiting.com"
+        "sdkoverseas.leiting.com",
+        "graph.facebook.com"
         #"skadsdk.appsflyer.com"
     ]
 
