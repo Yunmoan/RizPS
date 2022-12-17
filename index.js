@@ -27,10 +27,20 @@ const options = {
     key: fs.readFileSync('./cert/server.key'),
     cert: fs.readFileSync('./cert/server.crt')
 };//设置证书文件
+const serverinfo = {
+    platform: "Cross Platform",
+    arch: "ALL",
+    version: "RizPS 1.1 For Rizline 1.0.2",
+    git_online_repo: "https://github.com/Searchstars/RizPS",
+    type: "Source Code"
+}
+
+console.log("Welcome to RizPS\n" + serverinfo.version + "\narch: " + serverinfo.arch + "  platform: " + serverinfo.platform + "  type: " + serverinfo.type)
+console.log("RizPS是永久免费且开源的服务器软件，遵循GPL-3.0协议，这意味着您若要发布经过您修改的RizPS或使用了RizPS代码的软件，则必须同时开源。若您是在别处通过购买得到了RizPS，那么这意味着你已经被骗了。\n")
 
 const server = https.createServer(options,app);
 server.listen(port, host, () => {
-    console.log(`server address: https://${host}:${port}`);
+    console.log(`服务器启动成功，你可以通过以下地址访问: https://${host}:${port}`);
 });
 
 app.all('/', (req, res) => {
