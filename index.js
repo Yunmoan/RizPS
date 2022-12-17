@@ -79,12 +79,7 @@ app.post("/login/sdkCheckLogin.do", (req, res) => {
         console.log("客户端正在尝试使用SDK登陆，发送的信息为：\n----------")
         console.log(req_datas + "\n----------")
         let resend = ""
-        if(req.headers["user-agent"].search("Darwin") != -1){
-            resend = "{\"message\":\"username or password error\",\"status\":\"10001\"}"
-        }
-        else{
-            resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"" + req_datas[16].split("=")[1] + "\\\",\\\"priority\\\":0,\\\"cmtBirth\\\":\\\"0\\\",\\\"bind\\\":\\\"\\\"}\",\"status\":\"1\"}"
-        }
+        resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"" + req_datas[16].split("=")[1] + "\\\",\\\"priority\\\":0,\\\"cmtBirth\\\":\\\"0\\\",\\\"bind\\\":\\\"\\\"}\",\"status\":\"1\"}"
         console.log(req.headers["user-agent"])
         console.log(resend)
         res.send(resend)
@@ -98,15 +93,10 @@ app.all("/login/guestLogin.do", (req, res) => {
     });
     req.on('end', function () {
         let beforce_req_datas = req_datas
-        console.log("客户端正在尝试游客登陆，发送的信息为：\n----------")
+        console.log("客户端正在尝试游客登陆（可能是初次尝试注册账号？），发送的信息为：\n----------")
         console.log(req_datas + "\n----------")
         let resend = ""
-        if(req_datas.search("isRegister=0") != -1){
-            resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"userpwd\\\":\\\"3514df02e1a4ee63056efb5ca6989231\\\",\\\"sid\\\":\\\"RizPSUseras\\\",\\\"username\\\":\\\"RizPSUsera\\\",\\\"token\\\":\\\"d384f207b6d76360a364824099e1937c\\\",\\\"cmtBirth\\\":0,\\\"bind\\\":\\\"\\\"}\",\"status\":\"1\"}"
-        }
-        else{
-            resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"userpwd\\\":\\\"FuckYouLTGames\\\",\\\"sid\\\":\\\"RizPSUser\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"157osf59ksl227n25pkocbf4a212reac\\\",\\\"priority\\\":3,\\\"cmtBirth\\\":\\\"3\\\",\\\"bind\\\":\\\"9\\\"}\",\"status\":\"1\"}"
-        }
+        resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"userpwd\\\":\\\"e5d566420a1a489f3198df1fbc50b916\\\",\\\"sid\\\":\\\"myglp5t0\\\",\\\"username\\\":\\\"yj5ekog5\\\",\\\"token\\\":\\\"f97f703b4c8d2138c6e1e678b1bc1698\\\",\\\"cmtBirth\\\":0,\\\"bind\\\":\\\"\\\"}\",\"status\":\"1\"}"
         //let resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"userpwd\\\":\\\"FuckYouLTGames\\\",\\\"sid\\\":\\\"RizPSUser\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"157osf59ksl227n25pkocbf4a212reac\\\",\\\"priority\\\":3,\\\"cmtBirth\\\":\\\"3\\\",\\\"bind\\\":\\\"9\\\"}\",\"status\":\"1\"}"
         console.log(resend)
         res.send(resend)

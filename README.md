@@ -137,6 +137,11 @@ mitmdump 输出正常，node 没反应，进 Rizline 更新错误100，网络错
 ## 社区
 加入Discord：[https://discord.gg/G64wHgqfUK](https://discord.gg/G64wHgqfUK)
 
+## 思路梳理
+1. 游戏第一次打开会从官方cdn下载assetbundles，可以理解为热更新，走服务器lvdgjosdl.ltgamesglobal.net（无需转发）
+2. 如果游戏是第一次打开，请求guestLogin.do进行账号注册，后续直接请求sdkCheckLogin.do当作正式账号登陆
+3. 对应请求收到后发送Fake Return骗过client即可
+
 ## 特别感谢
 
 特别感谢开源项目 [Grasscutters/Grasscutter](https://github.com/Grasscutters/Grasscutter) 提供的 `proxy.py` 及 `proxy_config.py`
