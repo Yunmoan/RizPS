@@ -66,11 +66,75 @@ openssl x509 -inform PEM -subject_hash_old -in mitmproxy-ca-cert.cer
 
 由于 Google 的限制，高版本 Android 无法直接安装可供系统信任的根证书
 
-若 /system 分区可写，在获取 Root 权限后将重命名好的证书放入 `/system/etc/security/cacerts` 目录下重启手机即可
+- 方法一（需Root）：
 
-若 /system 分区只读，则需要通过 Magisk 模块的方式安装证书，在 http://mitm.it/cert/magisk 即可获取用于安装的 Magisk 模块
+    若 /system 分区可写，在获取 Root 权限后将重命名好的证书放入 `/system/etc/security/cacerts` 目录下重启手机即可
 
-在安装好证书之后，打开手机的系统设置，此时应该能在 安全 - 更多安全设置 - 加密与凭据 - 信任的凭据(不同手机厂商可能位置不同) 中的系统一栏找到 mitmproxy 的证书
+    若 /system 分区只读，则需要通过 Magisk 模块的方式安装证书，在 http://mitm.it/cert/magisk 即可获取用于安装的 Magisk 模块
+
+    在安装好证书之后，打开手机的系统设置，此时应该能在 安全 - 更多安全设置 - 加密与凭据 - 信任的凭据(不同手机厂商可能位置不同) 中的系统一栏找到 mitmproxy 的证书
+
+- 方法二：
+
+    使用工具：
+    - MT管理器
+    - adb
+
+    ## 1.提取或下载安装包
+    使用 MT管理器的提取安装包功能提取安装包，你很可能会获得一个 apks 格式的安装包，我们要将其转换成 apk
+
+    解压，里面一般有 base.apk 和 split_config.xxx.apk 两个文件
+
+    将 split_config.xxx.apk 里的 lib 添加到 base.apk 即可
+
+    ## 2.修改 xml 文件
+    使用MT管理器的反编译 xml 功能，打开 `res/xml/lt_network_security_config.xml`
+    你可能会看到以下内容
+    ```xml
+    <?xml version="1.0" encoding="utf-8"?>
+    <!--开通会员可提高反编译速度、资源代码自动转名称，以及激活智能编辑和自动补全功能-->
+    <network-security-config>
+        <base-config cleartextTrafficPermitted="true" />
+    </network-security-config>
+    ```
+    按照以下示例修改
+    ```xml
+    <?xml version="1.0" encoding="utf-8"?>
+    <!--开通会员可提高反编译速度、资源代码自动转名称，以及激活智能编辑和自动补全功能-->
+    <network-security-config>
+        <base-config cleartextTrafficPermitted="true" />
+        <domain-config>
+            <!-- 要信任的域名 -->
+            <!-- 跟 proxy.py 代理域名保持一致 -->
+            <domain includeSubdomains="true">cfgsdkos.leiting.com</domain>
+            <domain includeSubdomains="true">ltgames.aihelp.net</domain>
+            <domain includeSubdomains="true">leitsdkosshushu.leiting.com</domain>
+            <domain includeSubdomains="true">sdkoverseasrizlinehmt.ltgamesglobal.net</domain>
+            <domain includeSubdomains="true">amp-api-edge.apps.apple.com</domain>
+            <domain includeSubdomains="true">sdkoverseas.leiting.com</domain>
+            <trust-anchors>
+                <!-- 信任用户安装证书 -->
+                <certificates src="user" />
+            </trust-anchors>
+        </domain-config>
+    </network-security-config>
+    ```
+    保存，重新签名，上传电脑使用 adb 安装
+
+    要先卸载原版安装包，后续修改如果使用同一个签名则不需要卸载
+
+    ## 可能出现的问题
+    1. INSTALL_FAILED_VERIFICATION_FAILURE
+
+        关闭签名校验
+        ```sh
+        adb shell settings put global verifier_verify_adb_installs 0
+        adb shell settings put global package_verifier_enable 0
+        ```
+    2. 手机直接安装时，出现 `安装失败(-22)`
+
+        使用 adb 安装
+
 
 #### iOS
 

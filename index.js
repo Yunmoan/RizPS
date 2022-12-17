@@ -22,7 +22,7 @@ app.use(express.static('public', express_options))
 //config配置
 const host = "0.0.0.0"//对外ip 当然首选0.0.0.0
 const port = 1244;//对外端口号
-const loglevel = 1//0表示显示全log，1表示精简显示log 目前这个选项暂时没用
+const loglevel = 1//0表示显示全log，1表示精简显示log
 const options = {
     key: fs.readFileSync('./cert/server.key'),
     cert: fs.readFileSync('./cert/server.crt')
@@ -46,7 +46,9 @@ app.all('/sync_data', (req, res) => {
         });
         req.on('end', function () {
             req_datas = decodeURIComponent(req_datas)
-            console.log("客户端向 /sync_data 发送 POST 请求 内容为：\n" + "-----------\n" + req_datas.toString() + "\n----------")
+            if(loglevel == 0){
+                console.log("客户端向 /sync_data 发送 POST 请求 内容为：\n" + "-----------\n" + req_datas.toString() + "\n----------")
+            }
             res.send("{\"code\":0}")
         })
     }
@@ -76,8 +78,8 @@ app.post("/login/sdkCheckLogin.do", (req, res) => {
     });
     req.on('end', function () {
         req_datas = req_datas.split("&")
-        console.log("客户端正在尝试使用SDK登陆，发送的信息为：\n----------")
-        console.log(req_datas + "\n----------")
+        console.log("客户端正在尝试使用SDK登陆，发送的信息为：")
+        console.log(req_datas)
         let resend = ""
         resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"" + req_datas[16].split("=")[1] + "\\\",\\\"priority\\\":0,\\\"cmtBirth\\\":\\\"0\\\",\\\"bind\\\":\\\"\\\"}\",\"status\":\"1\"}"
         console.log(req.headers["user-agent"])
@@ -93,8 +95,8 @@ app.all("/login/guestLogin.do", (req, res) => {
     });
     req.on('end', function () {
         let beforce_req_datas = req_datas
-        console.log("客户端正在尝试游客登陆（可能是初次尝试注册账号？），发送的信息为：\n----------")
-        console.log(req_datas + "\n----------")
+        console.log("客户端正在尝试游客登陆（可能是初次尝试注册账号？），发送的信息为：")
+        console.log(req_datas)
         let resend = ""
         resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"userpwd\\\":\\\"e5d566420a1a489f3198df1fbc50b916\\\",\\\"sid\\\":\\\"myglp5t0\\\",\\\"username\\\":\\\"yj5ekog5\\\",\\\"token\\\":\\\"f97f703b4c8d2138c6e1e678b1bc1698\\\",\\\"cmtBirth\\\":0,\\\"bind\\\":\\\"\\\"}\",\"status\":\"1\"}"
         //let resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"userpwd\\\":\\\"FuckYouLTGames\\\",\\\"sid\\\":\\\"RizPSUser\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"157osf59ksl227n25pkocbf4a212reac\\\",\\\"priority\\\":3,\\\"cmtBirth\\\":\\\"3\\\",\\\"bind\\\":\\\"9\\\"}\",\"status\":\"1\"}"
