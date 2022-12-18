@@ -246,6 +246,10 @@ mitmdump 输出正常，node 没反应，进 Rizline 更新错误100，网络错
 
 > 不行，因为 fiddler.network.https> HTTPS handshake to 192.168.1.247 (for #96) failed. System.Security.Authentication.AuthenticationException 调用 SSPI 失败，请参见内部异常。 < 接收到的消息异常，或格式不正确。Win32 (SChannel) Native Error Code: 0x8009032615
 
+根据此README中的“绕过玩家区域验证”将谷歌和百度的流量转发到本地后，成功裸连进入RizPS，那么，是不是也能裸连进入官服？
+
+> 不行，在登陆时会报错ip limit
+
 ## 社区
 加入Discord：[https://discord.gg/G64wHgqfUK](https://discord.gg/G64wHgqfUK)
 
