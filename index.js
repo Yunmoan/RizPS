@@ -24,7 +24,7 @@ app.use(express.static('public', express_options))
 //config配置
 const host = "0.0.0.0"//对外ip 当然首选0.0.0.0
 const port = 443;//对外端口号
-const first_play = true //是否第一次打开游戏，详见README说明，此变量将会控制guestLogin.do的返回值，若返回值不正确将导致游戏本地数据出错，有可能需重装解决
+const first_play = false //是否第一次打开游戏，详见README说明，此变量将会控制guestLogin.do的返回值，若返回值不正确将导致游戏本地数据出错，有可能需重装解决
 const loglevel = 0//0表示显示全log，1表示精简显示log
 const options = {
     key: fs.readFileSync('./cert/server.key'),
@@ -144,6 +144,10 @@ app.all("/login/guestLogin.do", (req, res) => {
         res.send(resend)
     });
 })//游客登陆请求处理，如果是初次游玩，则需要额外给予玩家userpwd和sid还有username，正常游玩只需给予sid就够了
+
+app.all("/iosssconf", (req, res) => {
+    res.send(fs.readFileSync("./static_contents/ios_shadowrockets_conf.conf"))
+})
 
 
 //以下是一些杂乱的请求处理，不能确保全部有用

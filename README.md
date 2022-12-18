@@ -65,7 +65,7 @@ mitmdump -s proxy.py -k --set block_global=false
 
 确保你手机跟电脑在<font color="00dd00">同一局域网下</font>，在手机上将 WiFi 代理设置为 <font color="00dd00">[电脑IP:8080]</font>（下载好证书之后请恢复原来的设置，否则会导致无法联网），使用浏览器打开 mitm.it
 
-不出意外的话应该能看到几个系统的图标，若显示 "If you can see this, traffic is not passing through mitmproxy."，请检查你的代理设置是否正确
+不出意外的话应该能看到几个系统的图标，点击对应的系统图标来下载合适的证书。若显示 "If you can see this, traffic is not passing through mitmproxy."，请检查你的代理设置是否正确
 
 #### Android
 
@@ -159,6 +159,16 @@ openssl x509 -inform PEM -subject_hash_old -in mitmproxy-ca-cert.cer
 
 在<font color="00dd00">设置 > 通用 > 关于本机 > 证书信任设置</font> 中找到刚才安装的证书，将其信任即可
 
+<font color="00dd00">注意，在这里，iOS与Android不同，在安装并信任证书后，请将HTTP代理关掉，而不是保持开启！！！</font>
+
+### 启动 node
+
+```shell
+node --tls-min-v1.2 index.js
+```
+
+随后，你便能看到服务器输出的日志了，服务器成功启动了！
+
 ## 绕过玩家区域验证
 
 由于Rizline在1.0.2更新中加入了区域验证，我们必须绕过区域验证才能实现裸连登陆，否则只能以路由器层面挂一个梯子游玩啦...
@@ -184,25 +194,23 @@ openssl x509 -inform PEM -subject_hash_old -in mitmproxy-ca-cert.cer
 填写完毕后保存，打开你手机的浏览器，试着访问`www.baidu.com`和`www.google.com`，看看是不是都能正常打开，可能两个链接打开后内容都变成了“欢迎来到RizPS！"，也可能谷歌打开后内容为“欢迎来到RizPS！"，百度打开后内容跟平时没区别，这都是正常的，说白了就是只要确保访问这两个网站时的HTTP Status都是<font color="00dd00">200 OK</font>就行
 
 #### iOS
-iOS目前还正在想有什么好的办法，ummmmm....可能得用上Shadowrocket？
+首先，安装Shadowrocket，安装的方法有很多种，可以跨区自己买，亦或是使用互联网上免费的共享账号下载，又可以是在越狱后直接安装ipa...这些都由您自己决定
 
-### 启动 node
+然后，打开Shadowrocket，在“首页”点击右上角的加号，类型选择HTTP，地址填你电脑ip，端口为index.js中设置的（默认443），剩下的全空着，然后点右上角保存
 
-```shell
-node --tls-min-v1.2 index.js
-```
+然后，你就能看到在首页多了一个本地节点，先别着急连接，看到屏幕最下方，有个“配置”选项卡，点它
 
-随后，你便能看到服务器输出的日志了，服务器成功启动了！
+进入配置后，点击右上角的加号，此时输入 [https://电脑IP/iosssconf] ，然后点击下载。随后，你会看见下方的多了一个远程文件，点击它，再点使用配置，大功告成。
 
 ### Enjoy
 
-在确保 mitmdump 和 node 都正常运行的情况下，在手机上将 WiFi 代理设置为 [电脑IP:8080]，启动Rizline，Enjoy it😊！
+在确保 mitmdump 和 node 都正常运行的情况下，如果是Android，在手机上将 WiFi 代理设置为 [电脑IP:8080]，如果是iOS，在Shadowrocket的首页选择按上面步骤添加的本地节点然后连接，最后启动Rizline，Enjoy it😊！
 
 <font color="00dd00">游戏安装后第一次启动会下载资源文件，可能需要比较长的时间</font>，超过10分钟可以尝试重启游戏，实在不行再当作一个问题去询问他人
 
 在打开游戏后，请<font color="00dd00">一直使用游客登陆，忽视所有</font>让你绑定账号或重试账号登陆的提示，若弹出请选择与继续游客登陆相关的选项
 
-玩够了记得把手机上的代理设置<font color="00dd00">恢复原状</font>，否则会导致无法正常联网
+玩够了记得把手机上的代理设置<font color="00dd00">恢复原状</font>，否则会导致无法正常联网，比如Android，直接关闭HTTP代理即可，而iOS，关闭Shadowrocket并将配置恢复默认即可
 
 ## 游戏报错解决
 
@@ -226,7 +234,7 @@ Rizline尚未在你所在的地区提供服务，敬请期待！
 
 验证失败（2010）
 
-> 报错原理未知，本人仅使用安卓模拟器复现成功一次，完全卸载游戏并删除全部相关资源文件后重新安装解决
+> index.js中的first_play设置不正确，第二次登陆游戏时需要改回去喔！改完记得重启node！
 
 游戏在转圈尝试登陆后崩溃
 

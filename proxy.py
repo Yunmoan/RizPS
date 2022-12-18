@@ -46,7 +46,11 @@ class MlgmXyysd_Animation_Company_Proxy:
         "amp-api-edge.apps.apple.com",
         "sdkoverseas.leiting.com",
         "graph.facebook.com",
-        "location.services.mozilla.com"
+        "location.services.mozilla.com",
+        "www.google.com",
+        "google.com",
+        "www.baidu.com",
+        "baidu.com"
         #"skadsdk.appsflyer.com"
     ]#RESEND模式下需要转发的域名列表
 
