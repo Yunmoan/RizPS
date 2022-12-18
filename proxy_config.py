@@ -4,7 +4,7 @@ import os
 USE_SSL = True
 REMOTE_HOST = "192.168.1.247"
 REMOTE_PORT = 443
-PROXY_MODE = "RESEND"
+PROXY_MODE = "RESEND"#RESEND：按需转发模式 ALLOW：按需允许模式   目前经过测试建议使用RESEND，ALLOW可用性未知，甚至可能连游戏都进不去
 
 if os.getenv('MITM_REMOTE_HOST') != None:
     REMOTE_HOST = os.getenv('MITM_REMOTE_HOST')

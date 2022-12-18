@@ -35,7 +35,7 @@ class MlgmXyysd_Animation_Company_Proxy:
 
     LIST_ALLOW_DOMAINS = [
         "lvdgjosdl.ltgamesglobal.net",
-    ]
+    ]#ALLOW模式下允许直连的域名列表
 
     LIST_RESEND_DOMAINS = [
         "cfgsdkos.leiting.com",
@@ -48,12 +48,12 @@ class MlgmXyysd_Animation_Company_Proxy:
         "graph.facebook.com",
         "location.services.mozilla.com"
         #"skadsdk.appsflyer.com"
-    ]
+    ]#RESEND模式下需要转发的域名列表
 
     def request(self, flow: http.HTTPFlow) -> None:
         print("原请求URL：" + flow.request.url)
         if PROXY_MODE == "ALLOW":
-            if flow.request.host in self.LIST_ALLOW_DOMAINS:
+            if flow.request.host in self.LIST_ALLOW_DOMAINS:#ALLOW模式下，如果访问的域名是允许的，则什么都不干，否则替换Host和Port
                 pass
             else:
                 if USE_SSL:
@@ -63,7 +63,7 @@ class MlgmXyysd_Animation_Company_Proxy:
                 flow.request.host = REMOTE_HOST
                 flow.request.port = REMOTE_PORT
         elif PROXY_MODE == "RESEND":
-            if flow.request.host in self.LIST_RESEND_DOMAINS:
+            if flow.request.host in self.LIST_RESEND_DOMAINS:#RESEND模式下，如果访问的域名是需要转发的，则替换Host和Port
                 if USE_SSL:
                     flow.request.scheme = "https"
                 else:
