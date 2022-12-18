@@ -33,7 +33,7 @@ const options = {
 const serverinfo = {
     platform: "Cross Platform",
     arch: "ALL",
-    version: "RizPS 1.1 For Rizline 1.0.2",
+    version: "RizPS 1.2 For Rizline 1.0.2",
     git_online_repo: "https://github.com/Searchstars/RizPS",
     type: "Source Code"
 }
