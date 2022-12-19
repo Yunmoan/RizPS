@@ -22,7 +22,7 @@
 
 import collections
 import random
-from mitmproxy import http, connection, ctx, tls
+from mitmproxy import http, connection, ctx, tls, connection
 from abc import ABC, abstractmethod
 from enum import Enum
 from mitmproxy.utils import human
@@ -30,6 +30,9 @@ from proxy_config import USE_SSL
 from proxy_config import REMOTE_HOST
 from proxy_config import REMOTE_PORT
 from proxy_config import PROXY_MODE
+
+newfile = open("mitmdump-capturedata.txt","w+")
+newfile.close()
 
 class MlgmXyysd_Animation_Company_Proxy:
 
@@ -50,10 +53,11 @@ class MlgmXyysd_Animation_Company_Proxy:
         "www.google.com",
         "google.com",
         "www.baidu.com",
-        "baidu.com"
+        "baidu.com",
+        "lvdgjosgame.ltgamesglobal.net",
+        "updateos.leiting.com"
         #"skadsdk.appsflyer.com"
     ]#RESEND模式下需要转发的域名列表
-
     def request(self, flow: http.HTTPFlow) -> None:
         print("原请求URL：" + flow.request.url)
         if PROXY_MODE == "ALLOW":
