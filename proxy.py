@@ -54,7 +54,6 @@ class MlgmXyysd_Animation_Company_Proxy:
         "google.com",
         "www.baidu.com",
         "baidu.com",
-        "lvdgjosgame.ltgamesglobal.net",
         "updateos.leiting.com"
         #"skadsdk.appsflyer.com"
     ]#RESEND模式下需要转发的域名列表

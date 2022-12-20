@@ -113,7 +113,7 @@ app.post("/login/sdkCheckLogin.do", (req, res) => {
         console.log(req_datas)
         let resend = ""
         if (req.headers["user-agent"].search("Darwin") != -1) {
-            resend = "{\"message\":\"username or password error\",\"status\":\"10001\"}"
+            resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"" + req_datas[3].split("=")[1] + "\\\",\\\"priority\\\":0,\\\"cmtBirth\\\":\\\"0\\\",\\\"bind\\\":\\\"\\\"}\",\"status\":\"1\"}"
         }
         else {
             resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"" + req_datas[16].split("=")[1] + "\\\",\\\"priority\\\":0,\\\"cmtBirth\\\":\\\"0\\\",\\\"bind\\\":\\\"\\\"}\",\"status\":\"1\"}"
@@ -152,6 +152,12 @@ app.all("/SDKLogin", (req, res) => {
         req_datas += chunk;
     });
     req.on('end', function () {
+        console.log("客户端正在尝试验证SDK Login，数据：" + req_datas)
+        res.headers = {
+            "Set-Token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYmYiOjE2NzE0MDkzOTkuMTMsImV4cCI6MTY3MTQxMjk5OS4xMywidXNlcklkIjoiNjM5YWFmMmYzOTRhYjJjZDUwNGMxZTU3IiwidXNlcm5hbWUiOiJ4a3lrbTlwNiJ9.iPGpzv3XFnvzxir-Ob2qX_TR-u4AQgKOHKD0k7T5Pwk",
+            "Sign": "FFu17LMJXzzJQJ52BZ9LNcyxh1w1bAYDG+qpFkXyTYk2PwJHoymjB5/9/ICQtvAITJEfvrI+YMsCoE12ZEJlbkvL52qkJrhLvV2Py1OvRubw31XuXGhoG/0pMVEzTivvQ6gXG/0fCJEgXBn2/p/XMr1XqlsLQxDUvnVYXYogZmjYksp1RszTwzYNXTP9yfXPkRxCdzBGvIIFi8ZUrNPgORV6BW5tKYn6LA4Wkod2C2uKv5vJJPMUFZraSg8iXLZXW4uEI6JN30A5eMYDRN9nuQPBAWDSreh2UTVt3rmMmUda6jXmFLPoUCDh67MzR3fRS/H6gmdqxxBhPIOWeGT5ckicJzKAF16GzNu181U/GWnHgFZ3fy68eZ7S4FOxNx1LGTvAN7UIq0OekrWZggm3QNvnw6QTLn1AD7nfqAhyrN6+VNdPBzu6LuheBLQZ3pxQ4YSeTxN/DAXw/mxRTqB7a3HN6Q5tPXNSzf3kemsknPbtd3Fmk6+uuhEDqBFXmzR4KcuX/bwgMKF6fvnMH4eCfDSpFO6AYgPfY7CTflKqCKWD1J+jlmcKC2lDWzQsoQDoQlWsTDQfLKE6fI8nwAZlsgna6kDBO5ZQd4D87XaDPQDHc8pNYU6D5YNyqFVcEc0h/aAkv9hx/a5rYqFvmbFGbqHGP6pHD10wRPiNJZ12Jpc="
+        }
+        //res.send(fs.readFileSync("./static_contents/SDKLoginStr.txt"))
         res.send(fs.readFileSync("./static_contents/SDKLoginStr.txt"))
     })
 })
