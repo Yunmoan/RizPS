@@ -10,8 +10,8 @@
         "iosUrlScheme": "https://test.leiting.com/11.apk",
         "taAppid": "16860a4b5466464ead7ef6537ed0fac9",
         "notice": {
-            "content": "ERROR",
-            "enable": 0
+            "content": "请使用RizPS定制客户端连接RizPS，定制客户端可以在RizPS的README中找到",
+            "enable": 1
         },
         "isReview": true,
         "logMonitorUrl": "https://test.leiting.com/11.apk",

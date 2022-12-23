@@ -10,6 +10,9 @@ const express = require('express');
 const fs = require('fs');
 const app = express();
 const request = require("request")
+const CryptoJS = require("crypto-js")
+const NodeRSA = require("node-rsa")
+const crypto = require('crypto');
 //导入库
 
 const express_options = {
@@ -25,8 +28,7 @@ app.use(express.static('public', express_options))
 //config配置
 const host = "0.0.0.0"//对外ip 当然首选0.0.0.0
 const port = 443;//对外端口号
-const first_play = false //是否第一次打开游戏，详见README说明，此变量将会控制guestLogin.do的返回值，若返回值不正确将导致游戏本地数据出错，有可能需重装解决
-const loglevel = 0//0表示显示全log，1表示精简显示log
+const loglevel = 1//0表示显示全log，1表示精简显示log
 const options = {
     key: fs.readFileSync('./cert/server.key'),
     cert: fs.readFileSync('./cert/server.crt')
@@ -34,11 +36,13 @@ const options = {
 const serverinfo = {
     platform: "Cross Platform",
     arch: "ALL",
-    version: "RizPS 1.2 For Rizline 1.0.2",
+    version: "RizPS 2.0 For Rizline 1.0.2",
     git_online_repo: "https://github.com/Searchstars/RizPS",
     type: "Source Code"
 }
 //设置服务器信息，如果要制作一键包的话，这很有用（平时也很有用不是吗(*/ω＼*) ）
+const rsa_private_key = new NodeRSA(fs.readFileSync("./RSA/private.pem"))
+const rsa_public_key = new NodeRSA(fs.readFileSync("./RSA/public.pem"))
 
 console.log("Welcome to RizPS\n" + serverinfo.version + "\narch: " + serverinfo.arch + "  platform: " + serverinfo.platform + "  type: " + serverinfo.type)
 console.log("RizPS是永久免费且开源的服务器软件，遵循GPL-3.0协议，这意味着您若要发布经过您修改的RizPS或使用了RizPS代码的软件，则必须同时开源。若您是在别处通过购买得到了RizPS，那么这意味着你已经被骗了。\n")
@@ -58,6 +62,38 @@ function randomString(e) {
     for (i = 0; i < e; i++) n += t.charAt(Math.floor(Math.random() * a));
     return n
 }//随机字符串函数，可用于生成token，当然用不到
+
+function AESdecrypt(k, i, base64, mode) {
+    const key = CryptoJS.enc.Utf8.parse(k);
+    const iv = CryptoJS.enc.Utf8.parse(i);
+    const encrypted = CryptoJS.AES.decrypt(base64, key, {
+        iv,
+        mode: mode,
+        padding: CryptoJS.pad.Pkcs7
+    });
+    return encrypted.toString(CryptoJS.enc.Utf8);
+}//AES Decrypt
+
+function AESencrypt(k, i, text, mode) {
+    const key = CryptoJS.enc.Utf8.parse(k);
+    const iv = CryptoJS.enc.Utf8.parse(i);
+    const encrypted = CryptoJS.AES.encrypt(text, key, {
+        iv,
+        mode: mode,
+        padding: CryptoJS.pad.Pkcs7
+    });
+    return encrypted.ciphertext.toString(CryptoJS.enc.Base64);
+}//AES Encrypt
+
+function RSA_PrivateKeyEncrypt(text){
+    return rsa_private_key.encryptPrivate(text,"base64")
+}
+
+function GetMD5(text){
+    let cryptomd5 = crypto.createHash("md5")
+    cryptomd5.update(text)
+    return cryptomd5.digest("hex")
+}
 
 app.all('/', (req, res) => {
     console.log("客户端向 / 发送 GET 请求")
@@ -113,10 +149,10 @@ app.post("/login/sdkCheckLogin.do", (req, res) => {
         console.log(req_datas)
         let resend = ""
         if (req.headers["user-agent"].search("Darwin") != -1) {
-            resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"" + req_datas[3].split("=")[1] + "\\\",\\\"priority\\\":0,\\\"cmtBirth\\\":\\\"0\\\",\\\"bind\\\":\\\"\\\"}\",\"status\":\"1\"}"
+            resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"" + req_datas[3].split("=")[1] + "\\\",\\\"priority\\\":0,\\\"cmtBirth\\\":\\\"9\\\",\\\"bind\\\":\\\"9\\\"}\",\"status\":\"1\"}"
         }
         else {
-            resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"" + req_datas[16].split("=")[1] + "\\\",\\\"priority\\\":0,\\\"cmtBirth\\\":\\\"0\\\",\\\"bind\\\":\\\"\\\"}\",\"status\":\"1\"}"
+            resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"" + req_datas[16].split("=")[1] + "\\\",\\\"priority\\\":0,\\\"cmtBirth\\\":\\\"9\\\",\\\"bind\\\":\\\"9\\\"}\",\"status\":\"1\"}"
         }
         console.log(req.headers["user-agent"])
         console.log(resend)
@@ -134,12 +170,7 @@ app.all("/login/guestLogin.do", (req, res) => {
         console.log("客户端正在尝试游客登陆（可能是初次尝试注册账号？），发送的信息为：")
         console.log(req_datas)
         let resend = ""
-        if (first_play != true) {
-            resend = "{\"message\":\"{\\\"timestamp\\\":\\\"1671263645898\\\",\\\"sid\\\":\\\"xkykm9p6\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"6ac0e471929872e866edbf8ef4aeb8f7\\\",\\\"cmtBirth\\\":\\\"0\\\",\\\"bind\\\":\\\"3\\\"}\",\"status\":\"1\"}"
-        }
-        else {
-            resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"userpwd\\\":\\\"e5d566420a1a489f3198df1fbc50b916\\\",\\\"sid\\\":\\\"myglp5t0\\\",\\\"username\\\":\\\"yj5ekog5\\\",\\\"token\\\":\\\"f97f703b4c8d2138c6e1e678b1bc1698\\\",\\\"cmtBirth\\\":0,\\\"bind\\\":\\\"\\\"}\",\"status\":\"1\"}"
-        }
+        resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"sid\\\":\\\"rzpusers\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"6ac0e471929872e866edbf8ef4aeb8f7\\\",\\\"cmtBirth\\\":\\\"9\\\",\\\"bind\\\":\\\"9\\\"}\",\"status\":\"1\"}"
         //let resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"userpwd\\\":\\\"FuckYouLTGames\\\",\\\"sid\\\":\\\"RizPSUser\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"157osf59ksl227n25pkocbf4a212reac\\\",\\\"priority\\\":3,\\\"cmtBirth\\\":\\\"3\\\",\\\"bind\\\":\\\"9\\\"}\",\"status\":\"1\"}"
         console.log(resend)
         res.send(resend)
@@ -153,14 +184,27 @@ app.all("/SDKLogin", (req, res) => {
     });
     req.on('end', function () {
         console.log("客户端正在尝试验证SDK Login，数据：" + req_datas)
-        res.headers = {
-            "Set-Token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYmYiOjE2NzE0MDkzOTkuMTMsImV4cCI6MTY3MTQxMjk5OS4xMywidXNlcklkIjoiNjM5YWFmMmYzOTRhYjJjZDUwNGMxZTU3IiwidXNlcm5hbWUiOiJ4a3lrbTlwNiJ9.iPGpzv3XFnvzxir-Ob2qX_TR-u4AQgKOHKD0k7T5Pwk",
-            "Sign": "FFu17LMJXzzJQJ52BZ9LNcyxh1w1bAYDG+qpFkXyTYk2PwJHoymjB5/9/ICQtvAITJEfvrI+YMsCoE12ZEJlbkvL52qkJrhLvV2Py1OvRubw31XuXGhoG/0pMVEzTivvQ6gXG/0fCJEgXBn2/p/XMr1XqlsLQxDUvnVYXYogZmjYksp1RszTwzYNXTP9yfXPkRxCdzBGvIIFi8ZUrNPgORV6BW5tKYn6LA4Wkod2C2uKv5vJJPMUFZraSg8iXLZXW4uEI6JN30A5eMYDRN9nuQPBAWDSreh2UTVt3rmMmUda6jXmFLPoUCDh67MzR3fRS/H6gmdqxxBhPIOWeGT5ckicJzKAF16GzNu181U/GWnHgFZ3fy68eZ7S4FOxNx1LGTvAN7UIq0OekrWZggm3QNvnw6QTLn1AD7nfqAhyrN6+VNdPBzu6LuheBLQZ3pxQ4YSeTxN/DAXw/mxRTqB7a3HN6Q5tPXNSzf3kemsknPbtd3Fmk6+uuhEDqBFXmzR4KcuX/bwgMKF6fvnMH4eCfDSpFO6AYgPfY7CTflKqCKWD1J+jlmcKC2lDWzQsoQDoQlWsTDQfLKE6fI8nwAZlsgna6kDBO5ZQd4D87XaDPQDHc8pNYU6D5YNyqFVcEc0h/aAkv9hx/a5rYqFvmbFGbqHGP6pHD10wRPiNJZ12Jpc="
+        let SDKLoginJson = fs.readFileSync("./static_contents/SDKLogin.json").toString()
+        let readyset_requestbody = AESencrypt("Sv@H,+SV-U*VEjCW,n7WA-@n}j3;U;XF","1%[OB.<YSw?)o:rQ",SDKLoginJson,CryptoJS.mode.CBC)//你游员工脸滚键盘写key和iv
+        let readyset_sign = RSA_PrivateKeyEncrypt(GetMD5(SDKLoginJson))
+        if(loglevel == 0){
+            console.log("加密SDKLogin明文Json到AES成功，结果：" + readyset_requestbody)
+            console.log("将SDKLogin明文计算得到的MD5用RSA私钥加密成功，结果为：" + readyset_sign)
         }
+        res.setHeader
+        res.set({
+            "Sign": readyset_sign,
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Expose-Headers": "data-count",
+            "Content-Type": "text/html; charset=utf-8",
+            "Vray": "Accept-Encoding",
+            "Alt-Svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+            "Via": "1.1 google"
+        })
         //res.send(fs.readFileSync("./static_contents/SDKLoginStr.txt"))
-        res.send(fs.readFileSync("./static_contents/SDKLoginStr.txt"))
+        res.send(readyset_requestbody)
     })
-})
+})//SDKLogin请求处理，包含对json的加解密计算
 
 app.all("/iosssconf", (req, res) => {
     res.send(fs.readFileSync("./static_contents/ios_shadowrockets_conf.conf"))
@@ -179,7 +223,23 @@ app.all("/67/410001_config_20190403.json", (req, res) => {
 })
 
 app.all("/lvdgj/version/release/410001_main.dis", (req, res) => {
+    res.send(fs.readFileSync("./static_contents/410001_main_dis_block.json"))
+    console.log("BROKEN -> 来自非RizPS定制客户端的连接")
+})
+
+app.all("/lvdgj/version/release/410001_rizps.is", (req, res) => {
     res.send(fs.readFileSync("./static_contents/410001_main_dis.json"))
+    console.log("CONNECTED -> 来自RizPS定制客户端的连接")
+})
+
+app.all("/lvdgj/version/release/310001_main.dis", (req, res) => {
+    res.send(fs.readFileSync("./static_contents/310001_main_dis_block.json"))
+    console.log("BROKEN -> 来自非RizPS定制客户端的连接")
+})
+
+app.all("/lvdgj/version/release/310001_rizps.is", (req, res) => {
+    res.send(fs.readFileSync("./static_contents/310001_main_dis.json"))
+    console.log("CONNECTED -> 来自RizPS定制客户端的连接")
 })
 
 const st_lg = fs.readFileSync("./static_contents/languageConfig.json").toString()
