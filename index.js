@@ -168,7 +168,8 @@ app.all("/login/guestLogin.do", (req, res) => {
     req.on('end', function () {
         let beforce_req_datas = req_datas
         console.log("客户端正在尝试游客登陆（可能是初次尝试注册账号？），发送的信息为：")
-        console.log(req_datas)
+        beforce_req_datas = JSON.parse(req_datas)
+        console.log(beforce_req_datas)
         let resend = ""
         resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"sid\\\":\\\"rzpusers\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"6ac0e471929872e866edbf8ef4aeb8f7\\\",\\\"cmtBirth\\\":\\\"9\\\",\\\"bind\\\":\\\"9\\\"}\",\"status\":\"1\"}"
         //let resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"userpwd\\\":\\\"FuckYouLTGames\\\",\\\"sid\\\":\\\"RizPSUser\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"157osf59ksl227n25pkocbf4a212reac\\\",\\\"priority\\\":3,\\\"cmtBirth\\\":\\\"3\\\",\\\"bind\\\":\\\"9\\\"}\",\"status\":\"1\"}"
@@ -213,6 +214,19 @@ app.all("/iosssconf", (req, res) => {
 app.all("/test", (req, res) => {
     res.statusCode = 200
     res.send()
+})
+
+app.all("/after_play", (req, res) => {
+    let req_datas = ""
+    req.on('data', function (chunk) {
+        req_datas += chunk;
+    });
+    req.on('end', function () {
+        req_datas = JSON.parse(req_datas)
+        console.log("客户端打完了一首歌！返回数据：")
+        console.log(req_datas)
+        res.send("success")//我也不知道官服这里返回的是什么，随便糊个上去
+    })
 })
 
 //以下是一些杂乱的请求处理，不能确保全部有用
