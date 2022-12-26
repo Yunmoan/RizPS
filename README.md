@@ -29,8 +29,10 @@
 2. 在点击探索 > “一起，开始旅途吧”常驻活动 后，会导致游戏卡在“通讯中”（其实歌曲本身就全解锁，完全没必要进入这个常驻活动）
 
 ## 经过测试的设备
-- [ ] iPhone X (iOS16 + AppStore台服Rizline1.0.2)
-- [x] Mumu安卓模拟器 (Android12 + GooglePlay HK版Rizline1.0.2)
+- [x] iPhone X (iOS16 + AppStore台服-RizPS定制版)
+- [x] iPad Air 2 (iOS15 + AppStore港服-RizPS定制版)
+- [x] Mumu安卓模拟器 (Android12 + Rizline1.0.2 TaptapIO-RizPS定制版)
+- [x] 小米10 (Android12 + MIUI13 + Rizline1.0.2 TaptapIO-RizPS定制版)
 
 ## 如何使用
 
