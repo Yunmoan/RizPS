@@ -238,7 +238,15 @@ app.all("/log/chargeLogReport.do", (req, res) => {
         console.log("客户端疑似出错！返回报错信息：\n" + req_datas)
         res.send("success")
     })
-})
+})//客户端报错信息收集
+
+app.all("/17637994909/principal/", (req, res) => {
+    res.send("{\"code\": 0}")
+})//GameCenter模拟1
+
+app.all("/WebObjects/GKProfileService.woa/wa/appInit", (req, res) => {
+    res.send("{\"code\": 0}")
+})//GameCenter模拟2
 
 //以下是一些杂乱的请求处理，不能确保全部有用
 const st_41_20190403json = fs.readFileSync("./static_contents/410001_config_20190403.json").toString()

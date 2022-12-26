@@ -56,6 +56,7 @@ class MlgmXyysd_Animation_Company_Proxy:
         "baidu.com",
         "lvdgjosgame.ltgamesglobal.net",
         "updateos.leiting.com",
+        "profile.gc.apple.com"
         #"skadsdk.appsflyer.com"
     ]#RESEND模式下需要转发的域名列表
 
@@ -84,7 +85,7 @@ class MlgmXyysd_Animation_Company_Proxy:
                     flow.request.host = REMOTE_HOST
                     flow.request.port = REMOTE_PORT
                 else:#RESEND所有纯ip访问
-                    print("纯ip访问")
+                    print("纯ip访问，ip=",flow.request.host)
                     for aa in self.IPADDR_RESEND_NUMBERS:
                         for bb in flow.request.host:
                             if bb == aa:
