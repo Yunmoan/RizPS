@@ -13,6 +13,7 @@ const request = require("request")
 const CryptoJS = require("crypto-js")
 const NodeRSA = require("node-rsa")
 const crypto = require('crypto');
+const { connect } = require("http2");
 //导入库
 
 const express_options = {
@@ -228,6 +229,17 @@ app.all("/after_play", (req, res) => {
     })
 })
 
+app.all("/log/chargeLogReport.do", (req, res) => {
+    let req_datas = ""
+    req.on('data', function (chunk) {
+        req_datas += chunk;
+    });
+    req.on('end', function () {
+        console.log("客户端疑似出错！返回报错信息：\n" + req_datas)
+        res.send("success")
+    })
+})
+
 //以下是一些杂乱的请求处理，不能确保全部有用
 const st_41_20190403json = fs.readFileSync("./static_contents/410001_config_20190403.json").toString()
 
@@ -314,10 +326,6 @@ app.all("/elva/api/SdkTrack/ExceptionTrack", (req, res) => {
 
 app.all("/api/v1.0/rules", (req, res) => {
     res.send("{\"message\":\"invalid signature\"}")
-})
-
-app.all("/log/chargeLogReport.do", (req, res) => {
-    res.send("success")
 })
 
 app.all("/elva/api/initset", (req, res) => {
