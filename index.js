@@ -168,8 +168,7 @@ app.all("/login/guestLogin.do", (req, res) => {
     req.on('end', function () {
         let beforce_req_datas = req_datas
         console.log("客户端正在尝试游客登陆（可能是初次尝试注册账号？），发送的信息为：")
-        beforce_req_datas = JSON.parse(req_datas)
-        console.log(beforce_req_datas)
+        console.log(req_datas)
         let resend = ""
         resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"sid\\\":\\\"rzpusers\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"6ac0e471929872e866edbf8ef4aeb8f7\\\",\\\"cmtBirth\\\":\\\"9\\\",\\\"bind\\\":\\\"9\\\"}\",\"status\":\"1\"}"
         //let resend = "{\"message\":\"{\\\"timestamp\\\":\\\"" + Date.now() + "\\\",\\\"userpwd\\\":\\\"FuckYouLTGames\\\",\\\"sid\\\":\\\"RizPSUser\\\",\\\"warnEndDate\\\":null,\\\"token\\\":\\\"157osf59ksl227n25pkocbf4a212reac\\\",\\\"priority\\\":3,\\\"cmtBirth\\\":\\\"3\\\",\\\"bind\\\":\\\"9\\\"}\",\"status\":\"1\"}"
